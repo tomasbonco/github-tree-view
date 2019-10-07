@@ -4,6 +4,7 @@ import commonjs from "rollup-plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
+import { stylus } from 'svelte-preprocess'
 
 import {
   preprocess,
@@ -26,7 +27,7 @@ const opts = {
 export default {
   input: "src/main.ts",
   output: {
-    sourcemap: true,
+    sourcemap: false,
     format: "iife",
     name: "app",
     file: "public/bundle.js"
@@ -40,7 +41,7 @@ export default {
       css: css => {
         css.write("public/bundle.css");
       },
-      preprocess: preprocess(opts)
+      preprocess: [stylus(), preprocess()]
     }),
 
     // If you have external dependencies installed from

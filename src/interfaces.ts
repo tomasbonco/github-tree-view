@@ -1,6 +1,7 @@
 export enum EFileState { ADDED, UPDATED, RENAMED, DELETED };
-export enum EDisplayModes { PLAIN_FILES, FOLDER_STRUCTURE }
+// export enum EDisplayModes { PLAIN_FILES, FOLDER_STRUCTURE }
 
+/*
 export interface IState
 {
     settings:
@@ -16,6 +17,7 @@ export interface IState
 	displayMode: EDisplayModes;
     activeFile: string;
 }
+*/
 
 export interface IFile
 {
@@ -37,20 +39,4 @@ export interface IFolder
 	subfolders: IFolder[],
 	files: IFile[],
 	isExpanded: boolean
-}
-
-export interface IFileUpdate
-{
-	path: string,
-	isCommented?: boolean,
-	hash?: string,
-	changeType?: EFileState,
-	additions?: number,
-	deletions?: number
-}
-
-export interface IFolderUpdate
-{
-	id: string;
-	isExpanded: boolean;
 }

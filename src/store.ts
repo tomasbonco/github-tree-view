@@ -1,14 +1,22 @@
 import { writable, derived, Writable, Readable } from 'svelte/store';
-import { IFile, IFolder } from './scrappers/interface';
+import { IFile, IFolder } from './interfaces';
 import { listDirectories } from './helpers/list-directories';
 import { getRandomId } from './helpers/get-random-id';
 
 export const files: Writable<IFile[]> = writable( [] );
-export const treeStructure: Readable<IFolder> = derived( files, $files =>
+export const treeStructure: Readable<IFolder> = derived( files, ( $files: IFile[] ) =>
 {
     const entryFolder: IFolder = getEmptyFolder();
 
-    $files.forEach( file => insertFile( file, entryFolder, listDirectories( file.path ) ) )
+    if ( $files.length === 0 )
+    {
+        return entryFolder;
+    }
+
+    $files.forEach( file =>
+    {
+        insertFile( file, entryFolder, listDirectories( file.path ) )
+    })
     optimizeStructure( entryFolder );
 
     return entryFolder;

@@ -5,10 +5,10 @@ export function prepareDomStructure()
 	const nextNode = files.nextSibling;
 
 	const wrapper = document.createElement( 'div' );
-	wrapper.id = 'github-plugin-wrapper';
+	wrapper.id = 'github-plugin__wrapper';
 
 	const leftElement = document.createElement( 'div' );
-	wrapper.id = 'github-plugin-file-browser';
+	leftElement.id = 'github-plugin__file-browser';
 
 	wrapper.appendChild( leftElement );
 	wrapper.appendChild( files ); // this removes element from Github's page

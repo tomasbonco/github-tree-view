@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@pyoner/svelte-ts-preprocess": "^1.2.1",
+    "less": "^3.10.3",
     "npm-run-all": "^4.1.5",
     "rollup": "^1.12.0",
     "rollup-plugin-commonjs": "^10.0.0",
@@ -12,7 +13,10 @@
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.24.2",
+    "stylus": "^0.54.7",
     "svelte": "^3.12.1",
+    "svelte-preprocess": "^3.1.2",
+    "svelte-preprocess-less": "^0.4.0",
     "typescript": "^3.7.0-beta"
   },
   "dependencies": {
