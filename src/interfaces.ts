@@ -22,21 +22,9 @@ export interface IState
 export interface IFile
 {
 	path: string;
-	dir: string;
-	base: string;
-	ext: string;
 	hash: string;
 	isCommented: boolean;
 	changeType: EFileState;
 	additions: number;
 	deletions: number;
-}
-
-export interface IFolder
-{
-	id: string;
-    name: string,
-	subfolders: IFolder[],
-	files: IFile[],
-	isExpanded: boolean
 }

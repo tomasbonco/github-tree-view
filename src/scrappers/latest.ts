@@ -1,5 +1,4 @@
 import { IFile, EFileState } from "../interfaces";
-import { expandPath } from "../helpers/expand-path";
 
 export function scrape(): IFile[]
 {
@@ -7,10 +6,10 @@ export function scrape(): IFile[]
 	// additions and Z deletions.`) contain additional information about file (like
 	// additions/deletions, type of change and so on), but cannot be used to obtain
 	// file's path. This work on Github.com
-	const toc: HTMLLIElement[] = Array.from( document.querySelectorAll( '#toc li' ) );
+	const toc: HTMLLIElement[] = Array.from( document.querySelectorAll( '#toc li' ) )
 
 	// Metadatas from <detail-menu> are similar, but available in Github Enterprise.
-	const detailsMenu: HTMLAnchorElement[] = Array.from( document.querySelectorAll( 'details-menu .toc-menu-item' ) )
+	const detailsMenu: HTMLAnchorElement[] = Array.from( document.querySelectorAll( 'details.toc-select .select-menu-item' ) as NodeListOf<HTMLAnchorElement> ).filter( x => ! x.href.match( /R[0-9]+-R[0-9]+$/ ) )
 
 	// FileHolders represent actual elements on page where diff is shown for given file.
 	// They are used to get file's path.
@@ -20,7 +19,6 @@ export function scrape(): IFile[]
 	/** GitHub is loading contend lazily */
 	if ( Math.max( toc.length, detailsMenu.length ) !== fileHolders.length || fileHolders.length === 0 )
 	{
-		console.info( toc.length, detailsMenu.length, fileHolders.length )
 		return [];
 	}
 
@@ -29,8 +27,8 @@ export function scrape(): IFile[]
 	{
 		const aElement = item.querySelector( 'a' ) || (() => { throw new Error( `<a> element can't be found inside one of <#toc li> element.`) } )();
 		const svgElement = item.querySelector( 'svg' ) || (() => { throw new Error( `<svg> element can't be found inside one of <#toc li> element.`) } )();
-		const additionsElement: HTMLSpanElement = item.querySelector( '.diffstat .text-green' ) || (() => { throw new Error( `<.text-green> element can't be found inside one of <#toc li> element.`) } )();
-		const deletionsElement: HTMLSpanElement = item.querySelector( '.diffstat .text-red' ) || (() => { throw new Error( `<.text-red> element can't be found inside one of <#toc li> element.`) } )();
+		const additionsElement: HTMLSpanElement | null = item.querySelector( '.diffstat .text-green' )
+		const deletionsElement: HTMLSpanElement | null = item.querySelector( '.diffstat .text-red' )
 
 		// Hash
 		const hash = aElement.getAttribute( 'href' ) || '';
@@ -39,8 +37,8 @@ export function scrape(): IFile[]
 		const changeType = getChangeTypeFromSvg( svgElement );
 		
 		// Additions & Deletions
-		const additions = parseInt( additionsElement.innerText.trim() );
-		const deletions = parseInt( deletionsElement.innerText.trim().replace('−', '-') );
+		const additions = additionsElement ? parseInt( additionsElement.innerText.trim() ) : 0;
+		const deletions = deletionsElement ? parseInt( deletionsElement.innerText.trim().replace('−', '-') ) : 0;
 
 		return {
 			hash,
@@ -88,12 +86,10 @@ export function scrape(): IFile[]
 		const pathRaw = ( filePathElement.getAttribute( 'title' ) || filePathElement.innerText )
 		const path = ( pathRaw.split('→').pop() as string ).trim(); // returns renamed file name or just filename, if file was not renamed
 
-		const { dir, base, ext } = expandPath( path );
-
-		return { hash, dir, base, ext, path }
+		return { hash, path }
 	}).reduce(
 		( prev, curr ) => { prev[ curr.hash ] = curr; return prev; }, // reduces array into object
-		{} as { [hash: string]: { hash: string, dir: string, base: string, ext: string, path: string } } // intial value
+		{} as { [hash: string]: { hash: string,  path: string } } // intial value
 	)
 
 	

@@ -1,19 +1,29 @@
+import '../views/gtw-file-browser'
+import '../views/gtw-wrapper'
+import { attachToElement } from '../views/lit-wrapper';
+import { GtwWrapper } from '../views/gtw-wrapper';
+import { GtwFileBrowser } from '../views/gtw-file-browser';
+import { createEllipsis } from './create-ellipsis';
+
 export function prepareDomStructure()
 {
+	console.log( 'Prepare DOM structure' )
 	const files = document.querySelector( '#files' ) || (() => { throw new Error( `<#files> element can't be found on current page.`) } )();
-	const parentNode = files.parentNode || (() => { throw new Error( `<#files> element doesn't have parentNode. Weird right?`) } )()
+	const parentNode = files.parentElement || (() => { throw new Error( `<#files> element doesn't have parentElement. Weird right?`) } )()
 	const nextNode = files.nextSibling;
 
 	const wrapper = document.createElement( 'div' );
-	wrapper.id = 'github-plugin__wrapper';
+	wrapper.classList.add( 'gtw-wrapper' );
+	attachToElement( wrapper, GtwWrapper );
 
-	const leftElement = document.createElement( 'div' );
-	leftElement.id = 'github-plugin__file-browser';
+	const fileBrowser = document.createElement( 'div' );
+	fileBrowser.classList.add( 'gtw-file-browser' );
+	attachToElement( fileBrowser, GtwFileBrowser );
 
-	wrapper.appendChild( leftElement );
+	wrapper.appendChild( fileBrowser );
 	wrapper.appendChild( files ); // this removes element from Github's page
 	
 	parentNode.insertBefore( wrapper, nextNode );
 
-	return leftElement;
+	return fileBrowser;
 }
