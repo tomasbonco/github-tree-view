@@ -18,7 +18,6 @@ import * as Github from './github'
 
 function onPushState( newPath: string ): void
 {
-	console.log( 'URL changed' )
 	Github.resetBodyWidth();
 
 	const isPR = newPath.endsWith( '/files' );
@@ -34,8 +33,6 @@ function onPushState( newPath: string ): void
 
 async function bootstrap()
 {
-	console.log( 'Bootstrapped!' );
-
 	Github.expandBody();
 
 	const maxAttempts = 7;
@@ -52,10 +49,7 @@ async function bootstrap()
 
 		catch ( e )
 		{
-			console.log( e );
-
 			if ( ++attempts >= maxAttempts ) { return; }
-			console.log( `Github Tree View will attempt to read content again in ${ interval }ms.` );
 
 			setTimeout( tryToDisplay, interval );
 			interval *= 2;

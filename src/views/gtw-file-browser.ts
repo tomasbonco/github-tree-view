@@ -291,10 +291,8 @@ export class GtwFileBrowser extends LitWrapper
 		// we want this action to take place only once
 		setTimeout( () =>
 		{
-			console.log( 'inside timeout' )
 			document.querySelectorAll( '.gtw-file-name' ).forEach( fileElement =>
 			{
-				console.log( 'yop' )
 				createEllipsis( fileElement as HTMLElement )
 			})
 		}, 500)

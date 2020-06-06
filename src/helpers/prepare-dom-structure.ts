@@ -7,7 +7,6 @@ import { createEllipsis } from './create-ellipsis';
 
 export function prepareDomStructure()
 {
-	console.log( 'Prepare DOM structure' )
 	const files = document.querySelector( '#files' ) || (() => { throw new Error( `<#files> element can't be found on current page.`) } )();
 	const parentNode = files.parentElement || (() => { throw new Error( `<#files> element doesn't have parentElement. Weird right?`) } )()
 	const nextNode = files.nextSibling;
