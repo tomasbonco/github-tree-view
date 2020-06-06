@@ -1,5 +1,5 @@
 import { scrape } from '../scrappers/latest';
-import { Tree, Parent, Node, mergeNames, unmergeNames } from 'repaths';
+import { Manager, Parent, Node, mergeNames, unmergeNames } from 'paths-tree-unist';
 import { LitWrapper } from './lit-wrapper';
 import { html, TemplateResult } from 'lit-html';
 import { css } from 'lit-css'
@@ -261,7 +261,7 @@ export class GtwFileBrowser extends LitWrapper
 	}
 
 
-	treeParser: Tree<IFile> = undefined;
+	treeManager: Manager<IFile> = undefined;
 	scrapped: { path: string, data: IFile }[] = [];
 
 	rescrap: number;
@@ -282,8 +282,8 @@ export class GtwFileBrowser extends LitWrapper
 
 		clearInterval( this.rescrap )
 
-		this.treeParser = new Tree( { defaultOpen: true }, [ mergeNames ], [ unmergeNames ])
-		await this.treeParser.setEntries( this.scrapped )
+		this.treeManager = new Manager( { defaultOpen: true }, [ mergeNames ], [ unmergeNames ])
+		await this.treeManager.setEntries( this.scrapped )
 
 		this.render();
 
@@ -305,12 +305,12 @@ export class GtwFileBrowser extends LitWrapper
 	{
 		if ( node.data.isOpen )
 		{
-			this.treeParser.close( node )
+			this.treeManager.close( node )
 		}
 
 		else
 		{
-			this.treeParser.open( node )
+			this.treeManager.open( node )
 		}
 
 		this.render();
@@ -414,7 +414,7 @@ export class GtwFileBrowser extends LitWrapper
 
 	render()
 	{
-		const title = this.treeParser && this.treeParser.tree && this.treeParser.tree.data.chunks.map( x => x.name ).join( '/' )
+		const title = this.treeManager && this.treeManager.getTree() && this.treeManager.getTree().data.chunks.map( x => x.name ).join( '/' )
 		const header = title ? html`<div class="gtw-header"> ${ title } </div>` : html``;
 
 		const loadingScreen = html`
@@ -431,7 +431,7 @@ export class GtwFileBrowser extends LitWrapper
 				<!-- Scroll area (file list) -->
 				<div class="gtw-tree-scroll">
 			
-					${ this.treeParser && this.treeParser.tree ? this.treeParser.tree.children.slice().sort( SORT ).map( ch => this.buildNode( ch )) : loadingScreen }
+					${ this.treeManager && this.treeManager.getTree() ? this.treeManager.getTree().children.slice().sort( SORT ).map( ch => this.buildNode( ch )) : loadingScreen }
 			
 				</div>
 				<!-- End of scroll area -->
